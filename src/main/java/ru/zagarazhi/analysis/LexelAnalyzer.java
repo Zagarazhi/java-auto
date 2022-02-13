@@ -111,6 +111,7 @@ public class LexelAnalyzer {
                         nextExpected = null;
                     } else {
                         real = null;
+                        pushError(i, expected, Type.UNDEFINED);
                     }
                     break;
             }
