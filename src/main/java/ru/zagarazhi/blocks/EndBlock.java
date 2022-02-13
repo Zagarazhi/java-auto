@@ -16,4 +16,22 @@ public class EndBlock implements Block {
     public void setDownArrowIndex(int downArrowIndex) {
     }
 
+    @Override
+    public void setNext(Block nextBlock) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int getDownArrowIndex() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int getUpArrowIndex() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
 }

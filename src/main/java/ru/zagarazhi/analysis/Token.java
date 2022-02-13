@@ -39,7 +39,7 @@ public class Token {
         this.value = value;
     }
 
-    public ArrayList<Block> tokenListToBlockList(Token[] newTokens) {
+    public static ArrayList<Block> tokenListToBlockList(Token[] newTokens) {
 
         Block prevBlock = null;
         ArrayList<Block> blockList = new ArrayList<>();
@@ -77,7 +77,7 @@ public class Token {
         throw new Error("Invalid input");
     }
 
-    private void push(ArrayList<Block> blockList, Block prevBlock) {
+    private static void push(ArrayList<Block> blockList, Block prevBlock) {
         if (prevBlock != null) {
             blockList.add(prevBlock);
         }

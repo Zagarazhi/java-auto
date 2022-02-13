@@ -6,8 +6,8 @@ public class YBlock implements Block {
     private Answear answear = Answear.getInstance();
     private String text;
     private Block next;
-    private int upArrowIndex;
-    private int downArrowIndex;
+    private int upArrowIndex = 0;
+    private int downArrowIndex = 0;
 
     public YBlock(String text) {
         this.text = text;
@@ -18,10 +18,12 @@ public class YBlock implements Block {
         this.next = next;
     }
 
+    @Override
     public int getUpArrowIndex() {
         return upArrowIndex;
     }
 
+    @Override
     public int getDownArrowIndex() {
         return downArrowIndex;
     }

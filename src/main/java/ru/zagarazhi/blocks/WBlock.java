@@ -2,8 +2,8 @@ package ru.zagarazhi.blocks;
 
 public class WBlock implements Block {
     private Block next;
-    private int upArrowIndex;
-    private int downArrowIndex;
+    private int upArrowIndex = 0;
+    private int downArrowIndex = 0;
 
     public WBlock() {
 
@@ -17,10 +17,12 @@ public class WBlock implements Block {
         this.next = next;
     }
 
+    @Override
     public int getUpArrowIndex() {
         return upArrowIndex;
     }
 
+    @Override
     public int getDownArrowIndex() {
         return downArrowIndex;
     }

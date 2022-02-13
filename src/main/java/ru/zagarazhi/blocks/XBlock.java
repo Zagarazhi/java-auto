@@ -4,8 +4,8 @@ public class XBlock implements Block {
     private boolean condition;
     private Block nextTrue;
     private Block nextFalse;
-    private int upArrowIndex;
-    private int downArrowIndex;
+    private int upArrowIndex = 0;
+    private int downArrowIndex = 0;
 
     public XBlock() {
 
@@ -26,10 +26,12 @@ public class XBlock implements Block {
         this.nextFalse = nextFalse;
     }
 
+    @Override
     public int getUpArrowIndex() {
         return upArrowIndex;
     }
 
+    @Override
     public int getDownArrowIndex() {
         return downArrowIndex;
     }
@@ -62,5 +64,11 @@ public class XBlock implements Block {
     @Override
     public void setDownArrowIndex(int downArrowIndex) {
         this.downArrowIndex = downArrowIndex;
+    }
+
+    @Override
+    public void setNext(Block nextBlock) {
+        // TODO Auto-generated method stub
+
     }
 }
