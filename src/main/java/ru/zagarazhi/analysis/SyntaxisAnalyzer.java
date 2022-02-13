@@ -15,7 +15,29 @@ public class SyntaxisAnalyzer {
         String[] availableValus = {"Н"};
 
         for(Token t : tokens){
-            
+            switch(t.getType()){
+                case DOWNARROW:
+                    break;
+                case ENDINDEX:
+                    break;
+                case INDEX:
+                    break;
+                case STARTINDEX:
+                    break;
+                case UNDEFINED:
+                    break;
+                case UPARROW:
+                    break;
+                case WBLOCK:
+                    break;
+                case XBLOCK:
+                    break;
+                case YBLOCK:
+                    break;
+                default:
+                    break;
+                
+            }
         }
 
         return results;

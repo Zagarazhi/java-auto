@@ -27,6 +27,14 @@ public class ErrorObserver {
         syntaxisErrors.add(error);
     }
 
+    public void clearLexicalErrors(){
+        lexicalErrors= new ArrayList<>();
+    }
+
+    public void clearSyntaxisErrors(){
+        syntaxisErrors= new ArrayList<>();
+    }
+
     public List<String> getLexicalErrors(){
         return lexicalErrors;
     }

@@ -40,6 +40,9 @@ public class LexelAnalyzer {
     }
 
     private static void pushError (int pos, Type expected, Type real){
+        if(expected == null || real == null){
+            return;
+        }
         errorObserver.pushToLexicalErrors(
             String.format("[LEXICAL WARN]: В позиции %d ожидалось %s, но было получено %s", 
                 pos + 1, 
