@@ -30,16 +30,8 @@ public class XBlock implements Block {
         return upArrowIndex;
     }
 
-    public void setUpArrowIndexes(int upArrowIndex) {
-        this.upArrowIndex = upArrowIndex;
-    }
-
     public int getDownArrowIndex() {
         return downArrowIndex;
-    }
-
-    public void setDownArrowIndex(int downArrowIndex) {
-        this.downArrowIndex = downArrowIndex;
     }
 
     public void setCondition(boolean condition) {
@@ -60,5 +52,15 @@ public class XBlock implements Block {
             return nextTrue;
         }
         return nextFalse;
+    }
+
+    @Override
+    public void setUpArrowIndex(int upArrowIndex) {
+        this.upArrowIndex = upArrowIndex;
+    }
+
+    @Override
+    public void setDownArrowIndex(int downArrowIndex) {
+        this.downArrowIndex = downArrowIndex;
     }
 }

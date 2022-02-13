@@ -8,4 +8,12 @@ public class EndBlock implements Block {
         return null;
     }
 
+    @Override
+    public void setUpArrowIndex(int upArrowIndex) {
+    }
+
+    @Override
+    public void setDownArrowIndex(int downArrowIndex) {
+    }
+
 }

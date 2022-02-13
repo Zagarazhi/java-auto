@@ -21,20 +21,22 @@ public class WBlock implements Block {
         return upArrowIndex;
     }
 
-    public void setUpArrowIndex(int upArrowIndex) {
-        this.upArrowIndex = upArrowIndex;
-    }
-
     public int getDownArrowIndex() {
         return downArrowIndex;
-    }
-
-    public void setDownArrowIndex(int downArrowIndex) {
-        this.downArrowIndex = downArrowIndex;
     }
 
     @Override
     public Block doJobAndGetNext() {
         return next;
+    }
+
+    @Override
+    public void setUpArrowIndex(int upArrowIndex) {
+        this.upArrowIndex = upArrowIndex;
+    }
+
+    @Override
+    public void setDownArrowIndex(int downArrowIndex) {
+        this.downArrowIndex = downArrowIndex;
     }
 }

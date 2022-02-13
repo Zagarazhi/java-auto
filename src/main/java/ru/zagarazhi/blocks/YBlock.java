@@ -22,16 +22,8 @@ public class YBlock implements Block {
         return upArrowIndex;
     }
 
-    public void setUpArrowIndexes(int upArrowIndex) {
-        this.upArrowIndex = upArrowIndex;
-    }
-
     public int getDownArrowIndex() {
         return downArrowIndex;
-    }
-
-    public void setDownArrowIndex(int downArrowIndex) {
-        this.downArrowIndex = downArrowIndex;
     }
 
     public void setNext(Block next) {
@@ -46,5 +38,15 @@ public class YBlock implements Block {
     public Block doJobAndGetNext() {
         doJob();
         return next;
+    }
+
+    @Override
+    public void setUpArrowIndex(int upArrowIndex) {
+        this.upArrowIndex = upArrowIndex;
+    }
+
+    @Override
+    public void setDownArrowIndex(int downArrowIndex) {
+        this.downArrowIndex = downArrowIndex;
     }
 }
