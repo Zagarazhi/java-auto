@@ -22,4 +22,8 @@ public class Answear {
     public String getAnswearText() {
         return answearText.toString();
     }
+
+    public void clearAnswearText(){
+        answearText.setLength(0);
+    }
 }
