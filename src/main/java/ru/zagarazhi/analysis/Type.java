@@ -9,7 +9,7 @@ public enum Type {
     ENDINDEX("'К'"),
     UPARROW("'U'"),
     DOWNARROW("'D'"),
-    UNDEFINED("'пустота'");
+    UNDEFINED("'неопределенный символ'");
 
     private final String text;
 
