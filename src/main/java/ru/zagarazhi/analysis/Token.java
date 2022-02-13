@@ -1,5 +1,12 @@
 package ru.zagarazhi.analysis;
 
+import java.sql.Blob;
+
+import ru.zagarazhi.blocks.Block;
+import ru.zagarazhi.blocks.EndBlock;
+import ru.zagarazhi.blocks.StartBlock;
+import ru.zagarazhi.blocks.YBlock;
+
 public class Token {
     private Type type;
     private String value;
@@ -10,7 +17,7 @@ public class Token {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("%s<%s>", this.type.toString(), this.value);
     }
 
@@ -28,5 +35,26 @@ public class Token {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public Block toBlock(Token nextToken) {
+        switch (nextToken.type.toString()) {
+            case "YBLOCK": {
+                if (nextToken.value == "Н") {
+                    return new StartBlock();
+                } else if (nextToken.value == "К") {
+                    return new EndBlock();
+                } else {
+                    return new YBlock("Y" + nextToken.value);
+                }
+            }
+            case "XBLOCK": {
+
+            }
+            case "WBLOCK": {
+
+            }
+        }
+        throw new Error("Invalid block type");
     }
 }

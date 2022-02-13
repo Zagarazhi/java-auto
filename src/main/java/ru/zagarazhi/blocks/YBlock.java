@@ -3,26 +3,42 @@ package ru.zagarazhi.blocks;
 import ru.zagarazhi.Answear;
 
 public class YBlock implements Block {
-    private Answear answear;
+    private Answear answear = Answear.getInstance();
     private String text;
     private Block next;
+    private int upArrowIndex;
+    private int downArrowIndex;
 
-    public YBlock(Answear answear, String text) {
-        this.answear = answear;
+    public YBlock(String text) {
         this.text = text;
     }
 
-    public YBlock(Answear answear, String text, Block next) {
-        this.answear = answear;
+    public YBlock(String text, Block next) {
         this.text = text;
         this.next = next;
     }
 
-    public void setNext(Block next){
+    public int getUpArrowIndex() {
+        return upArrowIndex;
+    }
+
+    public void setUpArrowIndexes(int upArrowIndex) {
+        this.upArrowIndex = upArrowIndex;
+    }
+
+    public int getDownArrowIndex() {
+        return downArrowIndex;
+    }
+
+    public void setDownArrowIndex(int downArrowIndex) {
+        this.downArrowIndex = downArrowIndex;
+    }
+
+    public void setNext(Block next) {
         this.next = next;
     }
 
-    private void doJob(){
+    private void doJob() {
         answear.addTextToAnswear(text);
     }
 
