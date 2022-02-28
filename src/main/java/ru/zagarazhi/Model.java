@@ -64,18 +64,16 @@ public class Model {
                     }
                     if (isFullRun) {
                         if (x.contains(index)) {
-                            conditionSetter.setCondition((!conditionSetter.getCondition(lastCondition, firstIsZero)),
-                                    lastCondition);
-                            lastCondition++;
-                            // alreadyIn = true;
+                            alreadyIn = true;
+                            continue;
                         } else {
                             x.add(index);
-                            condition = conditionSetter.getCondition(lastCondition, firstIsZero);
+                            condition = conditionSetter.getCondition(lastCondition, firstIsZero, true);
                             lastCondition++;
                         }
                     } else {
                         x.add(index);
-                        condition = conditionSetter.getCondition(lastCondition, firstIsZero);
+                        condition = conditionSetter.getCondition(lastCondition, firstIsZero, false);
                         lastCondition++;
                     }
                     firstX = false;

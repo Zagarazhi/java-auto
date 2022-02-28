@@ -44,7 +44,7 @@ public class ConditionSetter {
         this.conditions.toCharArray()[index] = newcon;
     }
 
-    public boolean getCondition(int index, boolean firstIsZero) {
+    public boolean getCondition(int index, boolean firstIsZero, boolean isFull) {
         if (isFull) {
             if (index < conditions.length()) {
                 return convertCharToBoolean(firstIsZero ? conditions.charAt(index) : conditions.charAt(index - 1));

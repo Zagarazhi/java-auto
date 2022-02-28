@@ -67,7 +67,7 @@ public class CUI {
         int index = 0;
         for (int i = 1; i < tokens.length - 1; i++) {
             if (tokens[i].getType() == Type.XBLOCK) {
-                index = Integer.parseInt(tokens[i].getValue());
+                index = tokens[i].getPosition();
                 if (!x.contains(index)) {
                     x.add(index);
                     count++;
