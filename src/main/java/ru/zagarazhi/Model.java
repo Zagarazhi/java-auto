@@ -12,32 +12,33 @@ public class Model {
     private static ErrorObserver errorObserver = ErrorObserver.getInstance();
     private static ConditionSetter conditionSetter = ConditionSetter.getInstance();
 
-    private static int find(Token[] tokens, String index){
-        for(int i = 1; i < tokens.length - 1; i++){
-            if(tokens[i].getType() == Type.DOWNARROW && tokens[i].getValue().equals(index)){
+    private static int find(Token[] tokens, String index) {
+        for (int i = 1; i < tokens.length - 1; i++) {
+            if (tokens[i].getType() == Type.DOWNARROW && tokens[i].getValue().equals(index)) {
                 return i;
             }
         }
-        return -1;
+        return -2;
     }
 
-    public static void model(Token[] tokens){
+    public static void model(Token[] tokens, boolean isFullRun) {
         boolean condition = true;
         boolean alreadyIn = false;
         boolean firstX = true;
         boolean firstIsZero = true;
+        int lastCondition = 0;
         int index = 0;
         Set<Integer> x = new HashSet<Integer>();
-        for(int i = 1; i < tokens.length - 1; i++){
-            if(i == -1){
+        for (int i = 0; i < tokens.length; i++) {
+            if (i == -1) {
                 errorObserver.pushToSyntaxisErrors("[Syntaxis WARN]: Не найдено точки входа");
                 break;
             }
-            if(alreadyIn){
+            if (alreadyIn) {
                 errorObserver.pushToSyntaxisErrors("[Syntaxis WARN]: Попадение в бесконечный цикл");
                 break;
             }
-            switch(tokens[i].getType()){
+            switch (tokens[i].getType()) {
                 case DOWNARROW:
                     break;
                 case ENDINDEX:
@@ -49,7 +50,7 @@ public class Model {
                 case UNDEFINED:
                     break;
                 case UPARROW:
-                    if(!condition){
+                    if (!condition) {
                         i = find(tokens, tokens[i].getValue());
                     }
                     break;
@@ -57,15 +58,25 @@ public class Model {
                     condition = false;
                     break;
                 case XBLOCK:
-                    index = Integer.parseInt(tokens[i].getValue());
-                    if(firstX && index != 0){
+                    index = tokens[i].getPosition();
+                    if (firstX && index != 0) {
                         firstIsZero = false;
                     }
-                    if(x.contains(index)){
-                        alreadyIn = true;
+                    if (isFullRun) {
+                        if (x.contains(index)) {
+                            conditionSetter.setCondition((!conditionSetter.getCondition(lastCondition, firstIsZero)),
+                                    lastCondition);
+                            lastCondition++;
+                            // alreadyIn = true;
+                        } else {
+                            x.add(index);
+                            condition = conditionSetter.getCondition(lastCondition, firstIsZero);
+                            lastCondition++;
+                        }
                     } else {
                         x.add(index);
-                        condition = conditionSetter.getCondition(index, firstIsZero);
+                        condition = conditionSetter.getCondition(lastCondition, firstIsZero);
+                        lastCondition++;
                     }
                     firstX = false;
                     break;

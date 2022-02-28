@@ -3,12 +3,12 @@ package ru.zagarazhi;
 import ru.zagarazhi.view.CUI;
 
 public class ConditionSetter {
-    
+
     private static ConditionSetter instance;
     private String conditions;
     private boolean isFull = false;
 
-    private ConditionSetter(){
+    private ConditionSetter() {
 
     }
 
@@ -17,7 +17,7 @@ public class ConditionSetter {
     }
 
     public static ConditionSetter getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new ConditionSetter();
         }
         return instance;
@@ -39,10 +39,15 @@ public class ConditionSetter {
         this.conditions = conditions;
     }
 
-    public boolean getCondition(int index, boolean firstIsZero){
-        if(isFull){
-            if(index < conditions.length()){
-                return convertCharToBoolean(firstIsZero? conditions.charAt(index) : conditions.charAt(index - 1));
+    public void setCondition(boolean condition, int index) {
+        char newcon = condition ? '1' : '0';
+        this.conditions.toCharArray()[index] = newcon;
+    }
+
+    public boolean getCondition(int index, boolean firstIsZero) {
+        if (isFull) {
+            if (index < conditions.length()) {
+                return convertCharToBoolean(firstIsZero ? conditions.charAt(index) : conditions.charAt(index - 1));
             }
         }
         return CUI.getConditionFromUser(index);

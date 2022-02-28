@@ -23,7 +23,7 @@ import ru.zagarazhi.analysis.Token;
 import ru.zagarazhi.analysis.Type;
 
 public class CUI {
-    
+
     private ErrorObserver errorObserver = ErrorObserver.getInstance();
     private static Answear answear = Answear.getInstance();
     private List<String> activeLSA = new ArrayList<>();
@@ -34,7 +34,7 @@ public class CUI {
         return input.charAt(0) == '1' ? true : false;
     }
 
-    public static boolean getConditionFromUser(int index){
+    public static boolean getConditionFromUser(int index) {
         System.out.println("Текущий ответ: " + answear.getAnswearText());
         System.out.println("Введите значение для X" + index);
         System.out.print(">> ");
@@ -42,11 +42,11 @@ public class CUI {
     }
 
     private void getFromFile(String adress) {
-        try(BufferedReader reader = new BufferedReader(new FileReader(new File(adress), Charset.forName("UTF-8")))){
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(adress), Charset.forName("UTF-8")))) {
             String line = null;
-            do{
+            do {
                 line = reader.readLine();
-                if(line != null && !line.contains("//")){
+                if (line != null && !line.contains("//")) {
                     activeLSA.add(line);
                 }
             } while (line != null);
@@ -61,14 +61,14 @@ public class CUI {
         System.out.println("ЛСА загружены");
     }
 
-    private int countX(Token[] tokens){
+    private int countX(Token[] tokens) {
         int count = 0;
         Set<Integer> x = new HashSet<Integer>();
         int index = 0;
-        for(int i = 1; i < tokens.length - 1; i++){
-            if(tokens[i].getType() == Type.XBLOCK){
+        for (int i = 1; i < tokens.length - 1; i++) {
+            if (tokens[i].getType() == Type.XBLOCK) {
                 index = Integer.parseInt(tokens[i].getValue());
-                if(!x.contains(index)){
+                if (!x.contains(index)) {
                     x.add(index);
                     count++;
                 }
@@ -79,33 +79,33 @@ public class CUI {
 
     private String toBinary(int x, int len) {
         StringBuilder result = new StringBuilder();
-        for (int i = len - 1; i >= 0 ; i--){
+        for (int i = len - 1; i >= 0; i--) {
             int mask = 1 << i;
             result.append((x & mask) != 0 ? 1 : 0);
         }
         return result.toString();
     }
 
-    private void model(int number){
-        try{
+    private void model(int number) {
+        try {
             String lsa = activeLSA.get(number - 1);
             errorObserver.clearLexicalErrors();
             List<Token> list = LexelAnalyzer.lex(lsa);
-            if(errorObserver.getLexicalErrors().size() == 0){
+            if (errorObserver.getLexicalErrors().size() == 0) {
                 System.out.println("1. Последовательный ввод");
                 System.out.println("2. Ввод всех состояний");
                 System.out.println("3. Полный перебор");
                 System.out.print(">> ");
-                switch(scanner.nextInt()){
+                switch (scanner.nextInt()) {
                     case 1:
                         conditionSetter.setFull(false);
                         errorObserver.clearSyntaxisErrors();
                         answear.clearAnswearText();
-                        Model.model(list.toArray(new Token[list.size()]));
-                        if(errorObserver.getSyntaxisErrors().size() == 0){
+                        Model.model(list.toArray(new Token[list.size()]), false);
+                        if (errorObserver.getSyntaxisErrors().size() == 0) {
                             System.out.println("Ответ: " + answear.getAnswearText());
                         } else {
-                            for(String err : errorObserver.getSyntaxisErrors()){
+                            for (String err : errorObserver.getSyntaxisErrors()) {
                                 System.err.println(err);
                             }
                         }
@@ -117,28 +117,29 @@ public class CUI {
                         conditionSetter.setConditions(scanner.next());
                         errorObserver.clearSyntaxisErrors();
                         answear.clearAnswearText();
-                        Model.model(list.toArray(new Token[list.size()]));
-                        if(errorObserver.getSyntaxisErrors().size() == 0){
+                        Model.model(list.toArray(new Token[list.size()]), false);
+                        if (errorObserver.getSyntaxisErrors().size() == 0) {
                             System.out.println("Ответ: " + answear.getAnswearText());
                         } else {
-                            for(String err : errorObserver.getSyntaxisErrors()){
+                            for (String err : errorObserver.getSyntaxisErrors()) {
                                 System.err.println(err);
                             }
                         }
                         break;
                     case 3:
                         int count = countX(list.toArray(new Token[list.size()]));
-                        for(int i = 0; i < Math.pow(2, count); i++){
+                        for (int i = 0; i < Math.pow(2, count); i++) {
                             conditionSetter.setFull(true);
                             conditionSetter.setConditions(toBinary(i, count));
                             errorObserver.clearSyntaxisErrors();
                             answear.clearAnswearText();
-                            Model.model(list.toArray(new Token[list.size()]));
-                            if(errorObserver.getSyntaxisErrors().size() == 0){
-                                System.out.println(String.format("Ответ для %s: %s", toBinary(i, count), answear.getAnswearText()));
+                            Model.model(list.toArray(new Token[list.size()]), true);
+                            if (errorObserver.getSyntaxisErrors().size() == 0) {
+                                System.out.println(String.format("Ответ для %s: %s", toBinary(i, count),
+                                        answear.getAnswearText()));
                             } else {
                                 System.out.println(String.format("Набор %s вызвал ошибки:", toBinary(i, count)));
-                                for(String err : errorObserver.getSyntaxisErrors()){
+                                for (String err : errorObserver.getSyntaxisErrors()) {
                                     System.err.println(err);
                                 }
                             }
@@ -148,41 +149,40 @@ public class CUI {
                         System.err.println("Нет такой опции!");
                         break;
                 }
-            }
-            else{
-                for(String err : errorObserver.getLexicalErrors()){
+            } else {
+                for (String err : errorObserver.getLexicalErrors()) {
                     System.err.println(err);
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("Ошибка!");
         }
     }
 
     private void showLSA() {
-        if(activeLSA.size() == 0) {
+        if (activeLSA.size() == 0) {
             System.out.println("Нет активных ЛСА");
             return;
         }
         int count = 1;
-        for(String lsa : activeLSA) {
+        for (String lsa : activeLSA) {
             System.out.println(String.format("%d: %s", count, lsa));
             count++;
         }
         int input = -1;
-        do{
+        do {
             System.out.println("Выберете ЛСА для построения модели или 0 для выхода: ");
             System.out.print(">> ");
-            try{
+            try {
                 input = scanner.nextInt();
-                if(input > 0){
+                if (input > 0) {
                     model(input);
                 }
             } catch (Exception e) {
                 System.err.println("Введенная строка не является числом!");
                 input = 0;
             }
-        } while(input != 0);
+        } while (input != 0);
     }
 
     private void getFromCosole() {
@@ -191,25 +191,25 @@ public class CUI {
         System.out.println(">Введите - чтобы отменить последнее изменение<");
         System.out.println(">Введите -- чтобы очистить строку<");
         System.out.println(">Введите ! чтобы вернуться в меню<");
-        String output = "YН";
+        String output = "";
         Deque<String> stack = new ArrayDeque<>();
         String input = "";
-        do{
+        do {
             System.out.println("Текущая строка: " + output);
             System.out.print(">> ");
             input = scanner.next();
-            if(input == null){
+            if (input == null) {
                 return;
             }
-            if(input.equals("+")){
+            if (input.equals("+")) {
                 break;
             } else if (input.equals("-")) {
-                if(!stack.isEmpty()){
+                if (!stack.isEmpty()) {
                     output = output.replace(stack.pop(), "");
                 }
             } else if (input.equals("--")) {
                 stack = new ArrayDeque<>();
-                output = "YН";
+                output = "";
             } else if (input.equals("!")) {
                 break;
             } else {
@@ -218,34 +218,34 @@ public class CUI {
                 errorObserver.clearLexicalErrors();
                 LexelAnalyzer.lex(output);
             }
-            if(errorObserver.getLexicalErrors().size() > 0){
-                for(String err : errorObserver.getLexicalErrors()){
+            if (errorObserver.getLexicalErrors().size() > 0) {
+                for (String err : errorObserver.getLexicalErrors()) {
                     System.err.println(err);
                 }
             }
-        }while (input != "+");
-        if(!input.equals("!")) {
+        } while (input != "+");
+        if (!input.equals("!")) {
             System.out.println(String.format("Строка '%s' добавлена!", output));
             activeLSA.add(output);
         }
     }
 
-    public void show(){
+    public void show() {
         int input = -1;
-        do{
+        do {
             System.out.println("\nЧто вы хотите сделать?");
             System.out.println("1. Загрузить ЛСА из файла");
             System.out.println("2. Ввести ЛСА с консоли");
             System.out.println("3. Вывести загруженные ЛСА");
             System.out.println("0. Выход");
             System.out.print(">> ");
-            try{
+            try {
                 input = scanner.nextInt();
-            } catch (Exception ex){
+            } catch (Exception ex) {
                 System.err.println("Введенная строка не является числом!");
                 break;
             }
-            switch(input){
+            switch (input) {
                 case 1:
                     System.out.println("Введите абсолютный путь до файла:");
                     System.out.print(">> ");
