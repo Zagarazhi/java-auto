@@ -8,10 +8,10 @@ public class TurtleLogic {
     private int currentY = 0;
 
     private int direction = 0;
-    // 0 - вверх
-    // 1 - вправо
-    // 2 - вниз
-    // 3 - влево
+    // 0 - вниз
+    // 1 - влево
+    // 2 - ввверх
+    // 3 - вправо
 
     public int getDirection() {
         return direction;
@@ -68,11 +68,11 @@ public class TurtleLogic {
     private boolean checkToRight(int direction) {
         switch (direction) {
             case 0:
-                return isBlockEmpty(getCurrentX() + 1, getCurrentY());
+                return isBlockEmpty(getCurrentX() - 1, getCurrentY());
             case 1:
                 return isBlockEmpty(getCurrentX(), getCurrentY() - 1);
             case 2:
-                return isBlockEmpty(getCurrentX() - 1, getCurrentY());
+                return isBlockEmpty(getCurrentX() + 1, getCurrentY());
             case 3:
                 return isBlockEmpty(getCurrentX(), getCurrentY() + 1);
             default:
@@ -83,11 +83,11 @@ public class TurtleLogic {
     private boolean checkToLeft(int direction) {
         switch (direction) {
             case 0:
-                return isBlockEmpty(getCurrentX() - 1, getCurrentY());
+                return isBlockEmpty(getCurrentX() + 1, getCurrentY());
             case 1:
                 return isBlockEmpty(getCurrentX(), getCurrentY() + 1);
             case 2:
-                return isBlockEmpty(getCurrentX() + 1, getCurrentY());
+                return isBlockEmpty(getCurrentX() - 1, getCurrentY());
             case 3:
                 return isBlockEmpty(getCurrentX(), getCurrentY() - 1);
             default:
@@ -100,11 +100,11 @@ public class TurtleLogic {
             case 0:
                 return isBlockEmpty(getCurrentX(), getCurrentY() + 1);
             case 1:
-                return isBlockEmpty(getCurrentX() + 1, getCurrentY());
+                return isBlockEmpty(getCurrentX() - 1, getCurrentY());
             case 2:
                 return isBlockEmpty(getCurrentX(), getCurrentY() - 1);
             case 3:
-                return isBlockEmpty(getCurrentX() - 1, getCurrentY());
+                return isBlockEmpty(getCurrentX() + 1, getCurrentY());
             default:
                 throw new Error("Invalid direction");
         }
