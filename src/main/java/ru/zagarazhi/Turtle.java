@@ -56,42 +56,47 @@ public class Turtle {
     }
 
     public void run(String modelId) {
+        boolean firstEntry = true;
         while (!this.isAtTargetBlock()) {
             switch (modelId) {
                 case "right":
                     try {
-                        this.rightHanded();
+                        this.rightHanded(firstEntry);
                     } catch (Exception e) {
                         break;
                     }
                 case "left":
                     try {
-                        this.leftHanded();
+                        this.leftHanded(firstEntry);
                     } catch (Exception e) {
                         break;
                     }
                 case "custom":
                     try {
-                        this.theOneAndOnly();
+                        this.theOneAndOnly(firstEntry);
                     } catch (Exception e) {
                         break;
                     }
                 default:
                     throw new Error("invalid programm id");
             }
+            firstEntry = false;
         }
     }
 
-    public void rightHanded() {
+    public void rightHanded(boolean firstEntry) {
         String lsa = "YНD1X4Y4WU2D3X5WU2D4X3Y3Y2WU1D5X2Y2WU1D6X3Y1Y2WU1D7Y1Y1X2Y2WU1D2YK";
         int[] xValues = {
                 isAtTargetBlock() ? 1 : 0,
+                isAtStartBlock() ? 1 : 0,
                 checkToRight(this.direction) ? 1 : 0,
                 checkForward(this.direction) ? 1 : 0,
                 checkToLeft(this.direction) ? 1 : 0,
                 checkForward(this.getOppositeDirection(this.direction)) ? 1 : 0,
-                isAtStartBlock() ? 1 : 0,
         };
+        if (firstEntry) {
+            xValues[1] = 0;
+        }
         String response = "YHY2YK"; // подвязать на response результат прогона лса
         switch (response) { // Y4 и Y5 - реакции от лса на завершение прогона/возвращение на старт
             case "YHY4YK": {
@@ -123,11 +128,11 @@ public class Turtle {
         }
     }
 
-    public void leftHanded() {
+    public void leftHanded(boolean firstEntry) {
 
     }
 
-    public void theOneAndOnly() {
+    public void theOneAndOnly(boolean firstEntry) {
 
     }
 
