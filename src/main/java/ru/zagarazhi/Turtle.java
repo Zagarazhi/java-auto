@@ -55,8 +55,60 @@ public class Turtle {
         return this.field[y][x];
     }
 
+    public void run(String modelId) {
+        while (!this.isAtTargetBlock()) {
+            switch (modelId) {
+                case "right":
+                    this.rightHanded();
+                case "left":
+                    this.leftHanded();
+                case "custom":
+                    this.theOneAndOnly();
+                default:
+                    throw new Error("invalid programm id");
+            }
+        }
+    }
+
     public void rightHanded() {
-        String lsa = "YНD1X4WU2D3X5WU2D4X3Y3Y2WU1D5X2Y2WU1D6X3Y1Y3WU1D7Y1Y1X2Y2WU1D2YK";
+        String lsa = "YНD1X4Y4WU2D3X5WU2D4X3Y3Y2WU1D5X2Y2WU1D6X3Y1Y2WU1D7Y1Y1X2Y2WU1D2YK";
+        int[] xValues = {
+                isAtTargetBlock() ? 1 : 0,
+                checkToRight(this.direction) ? 1 : 0,
+                checkForward(this.direction) ? 1 : 0,
+                checkToLeft(this.direction) ? 1 : 0,
+                checkForward(this.getOppositeDirection(this.direction)) ? 1 : 0,
+                isAtStartBlock() ? 1 : 0,
+        };
+        String response = "YHY2YK"; // подвязать на response результат прогона лса
+        switch (response) { // Y4 и Y5 - реакции от лса на завершение прогона/возвращение на старт
+            case "YHY4YK": {
+                System.out.println("Успех!");
+            }
+            case "YHY5YK": {
+                throw new Error("Черепаха вернулась в начальную точку, лабиринт непроходим методом правой руки");
+            }
+            case "YHY1Y2Yk": {
+                this.direction = rotateRight(this.direction);
+                moveForward(this.direction);
+            }
+            case "YHY2YK": {
+                moveForward(this.direction);
+            }
+            case "YHY3Y2YK":
+                this.direction = rotateLeft(this.direction);
+                moveForward(this.direction);
+            case "YHY1Y1YK": {
+                throw new Error("Черепаха закрыта со всех соторон и не может двигаться.");
+            }
+            case "YHY1Y1Y2YK": {
+                this.direction = rotateLeft(this.direction);
+                this.direction = rotateLeft(this.direction);
+                moveForward(this.direction);
+            }
+            default:
+                throw new Error("Ошибка обработки лса");
+        }
     }
 
     public void leftHanded() {
@@ -107,6 +159,66 @@ public class Turtle {
                 return isBlockEmpty(getCurrentX(), getCurrentY() - 1);
             case 3:
                 return isBlockEmpty(getCurrentX() + 1, getCurrentY());
+            default:
+                throw new Error("Invalid direction");
+        }
+    }
+
+    private int getOppositeDirection(int direction) {
+        switch (direction) {
+            case 0:
+                return 2;
+            case 1:
+                return 3;
+            case 2:
+                return 0;
+            case 3:
+                return 1;
+            default:
+                throw new Error("Invalid direction");
+        }
+    }
+
+    private int rotateRight(int direction) {
+        switch (direction) {
+            case 0:
+                return 1;
+            case 1:
+                return 2;
+            case 2:
+                return 3;
+            case 3:
+                return 0;
+            default:
+                throw new Error("Invalid direction");
+        }
+    }
+
+    private int rotateLeft(int direction) {
+        switch (direction) {
+            case 0:
+                return 3;
+            case 1:
+                return 0;
+            case 2:
+                return 1;
+            case 3:
+                return 2;
+            default:
+                throw new Error("Invalid direction");
+        }
+    }
+
+    private void moveForward(int direction) {
+        switch (direction) {
+            case 0:
+                this.currentY++;
+            case 1:
+                this.currentX--;
+            case 2:
+                this.currentY--;
+            case 3:
+                this.currentX++;
             default:
                 throw new Error("Invalid direction");
         }
