@@ -59,11 +59,23 @@ public class Turtle {
         while (!this.isAtTargetBlock()) {
             switch (modelId) {
                 case "right":
-                    this.rightHanded();
+                    try {
+                        this.rightHanded();
+                    } catch (Exception e) {
+                        break;
+                    }
                 case "left":
-                    this.leftHanded();
+                    try {
+                        this.leftHanded();
+                    } catch (Exception e) {
+                        break;
+                    }
                 case "custom":
-                    this.theOneAndOnly();
+                    try {
+                        this.theOneAndOnly();
+                    } catch (Exception e) {
+                        break;
+                    }
                 default:
                     throw new Error("invalid programm id");
             }
