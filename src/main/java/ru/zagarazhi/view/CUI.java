@@ -14,29 +14,36 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import ru.zagarazhi.Answear;
-import ru.zagarazhi.ConditionSetter;
-import ru.zagarazhi.ErrorObserver;
-import ru.zagarazhi.Model;
-import ru.zagarazhi.analysis.LexelAnalyzer;
-import ru.zagarazhi.analysis.Token;
-import ru.zagarazhi.analysis.Type;
+import ru.zagarazhi.controller.*;
+import ru.zagarazhi.model.*;
 
-public class CUI {
-
+public class CUI implements EventListener{
     private ErrorObserver errorObserver = ErrorObserver.getInstance();
-    private static Answear answear = Answear.getInstance();
-    private List<String> activeLSA = new ArrayList<>();
-    private static Scanner scanner = new Scanner(System.in);
+    private Answear answear = Answear.getInstance();
     private ConditionSetter conditionSetter = ConditionSetter.getInstance();
+    private List<String> activeLSA = new ArrayList<>();
+    private Scanner scanner = new Scanner(System.in);
+    private boolean noError = true;
+    private int conditionType = 0;
+    private int index = 0;
+    private String conditions;
 
-    private static boolean convertCharToBoolean(String input) {
-        return input.charAt(0) == '1' ? true : false;
+    public CUI(){
+        errorObserver.events.subscribe("error", this);
+        answear.events.subscribe("answear", this);
+        conditionSetter.events.subscribe("condition", this);
     }
 
-    public static boolean getConditionFromUser(int index) {
-        System.out.println("Текущий ответ: " + answear.getAnswearText());
-        System.out.println("Введите значение для X" + index);
+    private boolean convertCharToBoolean(String input) {
+        return !(input.charAt(0) == '0');
+    }
+
+    private boolean convertCharToBoolean(char input) {
+        return !(input == '0');
+    }
+
+    private boolean getConditionFromUser(String x) {
+        System.out.println("Введите значение для " + x);
         System.out.print(">> ");
         return convertCharToBoolean(scanner.next());
     }
@@ -53,10 +60,13 @@ public class CUI {
             reader.close();
         } catch (FileNotFoundException ex) {
             System.err.println("Файл не найден");
+            return;
         } catch (IOException e) {
             System.err.println("Ошибка чтения");
+            return;
         } catch (Exception exception) {
             System.err.println("Ошибка");
+            return;
         }
         System.out.println("ЛСА загружены");
     }
@@ -66,8 +76,8 @@ public class CUI {
         Set<Integer> x = new HashSet<Integer>();
         int index = 0;
         for (int i = 1; i < tokens.length - 1; i++) {
-            if (tokens[i].getType() == Type.XBLOCK) {
-                index = tokens[i].getPosition();
+            if (tokens[i].getType() == BlockType.XBLOCK) {
+                index = Integer.parseInt(tokens[i].getValue());
                 if (!x.contains(index)) {
                     x.add(index);
                     count++;
@@ -87,76 +97,63 @@ public class CUI {
     }
 
     private void model(int number) {
-        try {
-            String lsa = activeLSA.get(number - 1);
-            errorObserver.clearLexicalErrors();
-            List<Token> list = LexelAnalyzer.lex(lsa);
-            if (errorObserver.getLexicalErrors().size() == 0) {
-                System.out.println("1. Последовательный ввод");
-                System.out.println("2. Ввод всех состояний");
-                System.out.println("3. Полный перебор");
-                System.out.print(">> ");
-                switch (scanner.nextInt()) {
-                    case 1:
-                        conditionSetter.setFull(false);
-                        errorObserver.clearSyntaxisErrors();
-                        answear.clearAnswearText();
-                        Model.model(list.toArray(new Token[list.size()]), false);
-                        if (errorObserver.getSyntaxisErrors().size() == 0) {
-                            System.out.println("Ответ: " + answear.getAnswearText());
-                        } else {
-                            for (String err : errorObserver.getSyntaxisErrors()) {
-                                System.err.println(err);
-                            }
-                        }
-                        break;
-                    case 2:
-                        conditionSetter.setFull(true);
-                        System.out.println("Введите состояния, например '01101'");
-                        System.out.print(">> ");
-                        conditionSetter.setConditions(scanner.next());
-                        errorObserver.clearSyntaxisErrors();
-                        answear.clearAnswearText();
-                        Model.model(list.toArray(new Token[list.size()]), false);
-                        if (errorObserver.getSyntaxisErrors().size() == 0) {
-                            System.out.println("Ответ: " + answear.getAnswearText());
-                        } else {
-                            for (String err : errorObserver.getSyntaxisErrors()) {
-                                System.err.println(err);
-                            }
-                        }
-                        break;
-                    case 3:
-                        int count = countX(list.toArray(new Token[list.size()]));
-                        for (int i = 0; i < Math.pow(2, count); i++) {
-                            conditionSetter.setFull(true);
-                            conditionSetter.setConditions(toBinary(i, count));
-                            errorObserver.clearSyntaxisErrors();
-                            answear.clearAnswearText();
-                            Model.model(list.toArray(new Token[list.size()]), true);
-                            if (errorObserver.getSyntaxisErrors().size() == 0) {
-                                System.out.println(String.format("Ответ для %s: %s", toBinary(i, count),
-                                        answear.getAnswearText()));
+        String lsa = activeLSA.get(number - 1);
+        List<Token> list = LexelAnalyzer.lex(lsa);
+        answear.clearAnswear();
+        if (noError) {
+            System.out.println("1. Последовательный ввод");
+            System.out.println("2. Ввод всех состояний");
+            System.out.println("3. Полный перебор");
+            System.out.print(">> ");
+            switch (scanner.nextInt()) {
+                case 1:
+                    conditionType = 0;
+                    answear.clearAnswear();
+                    Model.model(list.toArray(new Token[list.size()]), false);
+                    if(noError){
+                        System.out.println("Ответ: " + answear.getAnswear());
+                    }
+                    noError = true;
+                    break;
+                case 2:
+                    conditionType = 1;
+                    index = 0;
+                    System.out.println("Введите состояния, например '01101'");
+                    System.out.print(">> ");
+                    conditions = scanner.next();
+                    answear.clearAnswear();
+                    Model.model(list.toArray(new Token[list.size()]), false);
+                    if(noError){
+                        System.out.println("Ответ: " + answear.getAnswear());
+                    }
+                    noError = true;
+                    break;
+                case 3:
+                    conditionType = 2;
+                    int count = countX(list.toArray(new Token[list.size()]));
+                    for (int i = 0; i < Math.pow(2, count); i++) {
+                        index = 0;
+                        answear.clearAnswear();
+                        conditions = toBinary(i, count);
+                        Model.model(list.toArray(new Token[list.size()]), true);
+                        if(noError){
+                            if(conditions.length() > 0){
+                                System.out.println(String.format("Ответ для %s: %s", conditions, answear.getAnswear()));
                             } else {
-                                System.out.println(String.format("Набор %s вызвал ошибки:", toBinary(i, count)));
-                                for (String err : errorObserver.getSyntaxisErrors()) {
-                                    System.err.println(err);
-                                }
+                                System.out.println("Ответ: " + answear.getAnswear());
                             }
+                        } else {
+                            System.out.print(" для " + conditions);
                         }
-                        break;
-                    default:
-                        System.err.println("Нет такой опции!");
-                        break;
-                }
-            } else {
-                for (String err : errorObserver.getLexicalErrors()) {
-                    System.err.println(err);
-                }
+                        noError = true;
+                    }
+                    break;
+                default:
+                    System.err.println("Нет такой опции!");
+                    break;
             }
-        } catch (Exception e) {
-            System.err.println("Ошибка!");
         }
+        noError = true;
     }
 
     private void showLSA() {
@@ -215,13 +212,7 @@ public class CUI {
             } else {
                 output += input;
                 stack.push(input);
-                errorObserver.clearLexicalErrors();
                 LexelAnalyzer.lex(output);
-            }
-            if (errorObserver.getLexicalErrors().size() > 0) {
-                for (String err : errorObserver.getLexicalErrors()) {
-                    System.err.println(err);
-                }
             }
         } while (input != "+");
         if (!input.equals("!")) {
@@ -265,5 +256,41 @@ public class CUI {
             }
         } while (input != 0);
         scanner.close();
+    }
+
+    @Override
+    public void update(String eventType, String message) {
+        switch(eventType){
+            case "error":
+                noError = false;
+                System.out.println(message);
+                break;
+            case "answear":
+                //
+                break;
+            case "condition":
+                switch(conditionType) {
+                    case 0:
+                        conditionSetter.setCondition(getConditionFromUser(message));
+                        break;
+                    case 1:
+                        if(index < conditions.length()){
+                            conditionSetter.setCondition(convertCharToBoolean(conditions.charAt(index)));
+                            index++;
+                        } else {
+                            conditionSetter.setCondition(getConditionFromUser(message));
+                        }
+                        break;
+                    case 2:
+                        conditionSetter.setCondition(convertCharToBoolean(conditions.charAt(index)));
+                        index++;
+                        break;
+                }
+                
+                break;
+            default:
+                //
+                break;
+        }
     }
 }

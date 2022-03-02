@@ -1,6 +1,6 @@
-package ru.zagarazhi.analysis;
+package ru.zagarazhi.model;
 
-public enum Type {
+public enum BlockType {
     YBLOCK("'Y'"),
     XBLOCK("'X'"),
     WBLOCK("'W'"),
@@ -13,7 +13,7 @@ public enum Type {
 
     private final String text;
 
-    private Type(String text){
+    private BlockType(String text){
         this.text = text;
     }
 
