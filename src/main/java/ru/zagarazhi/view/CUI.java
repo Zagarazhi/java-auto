@@ -240,7 +240,7 @@ public class CUI implements EventListener{
             answear.events.unsubscribe("answear", this);
             conditionSetter.events.unsubscribe("condition", this);
             try {
-                input = scanner.nextInt() - 1;
+                input = scanner.nextInt();
             } catch (Exception ex) {
                 System.err.println("Введенная строка не является числом!");
                 return;
