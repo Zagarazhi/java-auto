@@ -143,7 +143,7 @@ public class CUI implements EventListener{
                                 System.out.println("Ответ: " + answear.getAnswear());
                             }
                         } else {
-                            System.out.print(" для " + conditions);
+                            System.out.println("Был вызван следующим набором: " + conditions);
                         }
                         noError = true;
                     }
@@ -274,7 +274,7 @@ public class CUI implements EventListener{
             System.out.println("\nЧто вы хотите сделать?");
             System.out.println("1. Загрузить ЛСА из файла");
             System.out.println("2. Ввести ЛСА с консоли");
-            System.out.println("3. Вывести загруженные ЛСА");
+            System.out.println("3. Операции с загруженными ЛСА");
             System.out.println("4. Прохождение лабиринта");
             System.out.println("0. Выход");
             System.out.print(">> ");
