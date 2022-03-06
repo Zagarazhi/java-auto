@@ -269,35 +269,43 @@ public class Turtle implements EventListener{
                 System.out.println(message);
                 break;
             case "answear":
-                System.out.println();
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if(noError) {
+                    System.out.println();
+                    if(field[currentY][currentX]){
+                        errorObserver.pushError("Попадание в стену");
+                        noError = false;
+                        xValues[4] = true;
+                        break;
+                    }
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if(!first && isAtStartBlock()){
+                        System.out.println("Выход не найден");
+                    }
+                    if(isAtTargetBlock()){
+                        System.out.println("Выход успешно найден!");
+                    } else {
+                        move(message);
+                    }
+                    xValues[0] = !checkToRight(this.direction);
+                    xValues[1] = !checkForward(this.direction);
+                    xValues[2] = !checkToLeft(this.direction);
+                    xValues[3] = isAtTargetBlock();
+                    xValues[4] = isAtStartBlock();
+                    print();
+                    System.out.println(String.format(
+                        "X1: %d, X2: %d, X3: %d, X4: %d, X5: %d, %s", 
+                        xValues[0] ? 0 : 1, 
+                        xValues[1] ? 0 : 1, 
+                        xValues[2] ? 0 : 1,
+                        xValues[3] ? 1 : 0,
+                        xValues[4] ? 1 : 0,
+                        message
+                        ));
                 }
-                if(!first && isAtStartBlock()){
-                    System.out.println("Выход не найден");
-                }
-                if(isAtTargetBlock()){
-                    System.out.println("Выход успешно найден!");
-                } else {
-                    move(message);
-                }
-                xValues[0] = !checkToRight(this.direction);
-                xValues[1] = !checkForward(this.direction);
-                xValues[2] = !checkToLeft(this.direction);
-                xValues[3] = isAtTargetBlock();
-                xValues[4] = isAtStartBlock();
-                print();
-                System.out.println(String.format(
-                    "X1: %d, X2: %d, X3: %d, X4: %d, X5: %d, %s", 
-                    xValues[0] ? 0 : 1, 
-                    xValues[1] ? 0 : 1, 
-                    xValues[2] ? 0 : 1,
-                    xValues[3] ? 1 : 0,
-                    xValues[4] ? 1 : 0,
-                    message
-                    ));
                 break;
             case "condition":
                 String ans = message.replace("X", "");
