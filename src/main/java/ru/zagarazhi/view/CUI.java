@@ -231,7 +231,11 @@ public class CUI implements EventListener{
         if(noError){
             boolean[][] test = mr.getField();
             Turtle turtle = new Turtle(test, mr.getStartX(), mr.getStartY(), mr.getEndX(), mr.getEndY());
+            System.out.println("\n\n");
             System.out.println("Введите режим прохождения лабиринта или 0 для выхода");
+            System.out.println("");
+            turtle.printDemoMaze();
+            System.out.println("");
             System.out.println("1. Алгоритм левой руки");
             System.out.println("2. Алгоритм правой руки");
             System.out.print(">> ");

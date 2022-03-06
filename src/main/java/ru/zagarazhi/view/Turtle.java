@@ -32,6 +32,7 @@ public class Turtle implements EventListener{
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
     public Turtle(boolean[][] field, int startX, int startY, int endX, int endY) {
         errorObserver.events.subscribe("error", this);
@@ -81,7 +82,7 @@ public class Turtle implements EventListener{
                 } else if (x == targetX && y == targetY) {
                     System.out.print(ANSI_RED + "E" + ANSI_RESET);
                 } else {
-                    System.out.print(field[y][x] ? "1" : "0");
+                    System.out.print(field[y][x] ? ANSI_CYAN + "1" + ANSI_RESET : "0");
                 }
                 System.out.print(" ");
             }
@@ -247,6 +248,22 @@ public class Turtle implements EventListener{
             Model.model(list.toArray(new Token[list.size()]), false);
         }
         noError = true;
+    }
+
+    public void printDemoMaze() {
+        for (int y = 1; y < field.length - 1; y++) {
+            for (int x = 1; x < field[y].length - 1; x++) {
+                if (x == startX && y == startY) {
+                    System.out.print(ANSI_YELLOW + "S" + ANSI_RESET);
+                } else if (x == targetX && y == targetY) {
+                    System.out.print(ANSI_RED + "E" + ANSI_RESET);
+                } else {
+                    System.out.print(field[y][x] ? ANSI_CYAN + "1" + ANSI_RESET : "0");
+                }
+                System.out.print(" ");
+            }
+            System.out.println();
+        }
     }
 
     @Override
