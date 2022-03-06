@@ -42,12 +42,12 @@ public class Turtle implements EventListener{
                 }
             }
         }
-        this.startX = startX;
-        this.startY = startY;
-        this.targetX = endX;
-        this.targetY = endY;
-        this.currentX = startX;
-        this.currentY = startY;
+        this.startX = startX + 1;
+        this.startY = startY + 1;
+        this.targetX = endX + 1;
+        this.targetY = endY + 1;
+        this.currentX = startX + 1;
+        this.currentY = startY + 1;
     }
 
     private void print() {
@@ -56,7 +56,7 @@ public class Turtle implements EventListener{
                 if (x == currentX && y == currentY) {
                     switch(direction){
                         case 0:
-                            System.out.print("|");
+                            System.out.print("v");
                             break;
                         case 1:
                             System.out.print("<");

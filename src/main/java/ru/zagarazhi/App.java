@@ -1,15 +1,16 @@
 package ru.zagarazhi;
 
+import ru.zagarazhi.controller.MazeReader;
 import ru.zagarazhi.view.*;
 
 public class App {
     public static void main( String[] args ) {
         //CUI cui = new CUI();
         //cui.show();
-        boolean[][] test = {{true, false, false, false}, 
-                            {false, false, false, false}, 
-                            {false, false, false, false}};
-        Turtle turtle = new Turtle(test, 3, 1, 2, 3);
+        MazeReader mr = new MazeReader();
+        mr.readMaze("C:\\Users\\Daniil\\Projects\\java-auto\\src\\main\\java\\ru\\zagarazhi\\Fields\\maze.txt");
+        boolean[][] test = mr.getField();
+        Turtle turtle = new Turtle(test, mr.getStartX(), mr.getStartY(), mr.getEndX(), mr.getEndY());
         turtle.leftHanded();
     }
 }
