@@ -28,6 +28,11 @@ public class Turtle implements EventListener{
     // 2 - ввверх
     // 3 - вправо
 
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_RED = "\u001B[31m";
+
     public Turtle(boolean[][] field, int startX, int startY, int endX, int endY) {
         errorObserver.events.subscribe("error", this);
         answear.events.subscribe("answear", this);
@@ -56,25 +61,25 @@ public class Turtle implements EventListener{
                 if (x == currentX && y == currentY) {
                     switch(direction){
                         case 0:
-                            System.out.print("v");
+                            System.out.print(ANSI_GREEN + "v" + ANSI_RESET);
                             break;
                         case 1:
-                            System.out.print("<");
+                            System.out.print(ANSI_GREEN + "<" + ANSI_RESET);
                             break;
                         case 2:
-                            System.out.print("^");
+                            System.out.print(ANSI_GREEN + "^" + ANSI_RESET);
                             break;
                         case 3:
-                            System.out.print(">");
+                            System.out.print(ANSI_GREEN + ">" + ANSI_RESET);
                             break;
                         default:
-                            System.out.print("T");
+                            System.out.print(ANSI_GREEN + "T" + ANSI_RESET);
                             break;
                     }
                 } else if (x == startX && y == startY) {
-                    System.out.print("S");
+                    System.out.print(ANSI_YELLOW + "S" + ANSI_RESET);
                 } else if (x == targetX && y == targetY) {
-                    System.out.print("E");
+                    System.out.print(ANSI_RED + "E" + ANSI_RESET);
                 } else {
                     System.out.print(field[y][x] ? "1" : "0");
                 }
