@@ -83,7 +83,9 @@ public class MazeReader {
             String line = null;
             do {
                 line = reader.readLine();
-                ans.add(line.replace(" ", ""));
+                if(line != null){
+                    ans.add(line.replace(" ", ""));
+                }
             } while (line != null);
             reader.close();
         } catch (FileNotFoundException ex) {

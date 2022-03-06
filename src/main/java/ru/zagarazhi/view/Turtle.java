@@ -229,25 +229,8 @@ public class Turtle implements EventListener{
         }
     }
 
-    public void rightHanded() {
+    public void run(String lsa) {
         first = true;
-        String lsa = "YНD1X4U6X3U2X2U3X1U4Y3Y3X2U3D7X5U6WU1D2Y3Y2WU7D3Y2WU7D4Y1Y2WU7D6YK";
-        answear.clearAnswear();
-        List<Token> list = LexelAnalyzer.lex(lsa);
-        if(noError){
-            xValues[0] = !checkToRight(this.direction);
-            xValues[1] = !checkForward(this.direction);
-            xValues[2] = !checkToLeft(this.direction);
-            xValues[3] = isAtTargetBlock();
-            xValues[4] = isAtStartBlock();
-            Model.model(list.toArray(new Token[list.size()]), false);
-        }
-        noError = true;
-    }
-
-    public void leftHanded() {
-        first = true;
-        String lsa = "YНD1X4U6X1U2X2U3X3U4Y1Y1X2U3D7X5U6WU1D2Y1Y2WU7D3Y2WU7D4Y3Y2WU7D6YK";
         answear.clearAnswear();
         List<Token> list = LexelAnalyzer.lex(lsa);
         if(noError){

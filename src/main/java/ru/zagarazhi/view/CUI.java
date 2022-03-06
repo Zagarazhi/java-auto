@@ -221,6 +221,53 @@ public class CUI implements EventListener{
         }
     }
 
+    private void turtle() {
+        System.out.println("Введите абсолютный путь до файла, содержащего лабиринт");
+        System.out.print(">> ");
+        noError = true;
+        answear.clearAnswear();
+        MazeReader mr = new MazeReader();
+        mr.readMaze(scanner.next());
+        if(noError){
+            boolean[][] test = mr.getField();
+            Turtle turtle = new Turtle(test, mr.getStartX(), mr.getStartY(), mr.getEndX(), mr.getEndY());
+            System.out.println("Введите режим прохождения лабиринта или 0 для выхода");
+            System.out.println("1. Алгоритм левой руки");
+            System.out.println("2. Алгоритм правой руки");
+            System.out.print(">> ");
+            int input = -1;
+            errorObserver.events.unsubscribe("error", this);
+            answear.events.unsubscribe("answear", this);
+            conditionSetter.events.unsubscribe("condition", this);
+            try {
+                input = scanner.nextInt() - 1;
+            } catch (Exception ex) {
+                System.err.println("Введенная строка не является числом!");
+                return;
+            }
+            switch (input) {
+                case 1:
+                    turtle.run("YНD1X4U6X1U2X2U3X3U4Y1Y1X2U3D7X5U6WU1D2Y1Y2WU7D3Y2WU7D4Y3Y2WU7D6YK");
+                    errorObserver.events.unsubscribe("error", turtle);
+                    answear.events.unsubscribe("answear", turtle);
+                    conditionSetter.events.unsubscribe("condition", turtle);
+                    break;
+                case 2:
+                    turtle.run("YНD1X4U6X3U2X2U3X1U4Y3Y3X2U3D7X5U6WU1D2Y3Y2WU7D3Y2WU7D4Y1Y2WU7D6YK");
+                    errorObserver.events.unsubscribe("error", turtle);
+                    answear.events.unsubscribe("answear", turtle);
+                    conditionSetter.events.unsubscribe("condition", turtle);
+                    break;
+                case 0:
+                    //
+                    break;
+                default:
+                    System.err.println("Нет такой опции!");
+                    break;
+            }
+        }
+    }
+
     public void show() {
         int input = -1;
         do {
@@ -228,6 +275,7 @@ public class CUI implements EventListener{
             System.out.println("1. Загрузить ЛСА из файла");
             System.out.println("2. Ввести ЛСА с консоли");
             System.out.println("3. Вывести загруженные ЛСА");
+            System.out.println("4. Прохождение лабиринта");
             System.out.println("0. Выход");
             System.out.print(">> ");
             try {
@@ -247,6 +295,12 @@ public class CUI implements EventListener{
                     break;
                 case 3:
                     showLSA();
+                    break;
+                case 4:
+                    turtle();
+                    errorObserver.events.subscribe("error", this);
+                    answear.events.subscribe("answear", this);
+                    conditionSetter.events.subscribe("condition", this);
                     break;
                 case 0:
                     break;
