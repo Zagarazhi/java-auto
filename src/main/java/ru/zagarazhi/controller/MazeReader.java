@@ -18,7 +18,8 @@ public class MazeReader {
     private boolean[][] field;
 
     public MazeReader() {
-
+        this.endX = -100;
+        this.endY = -100;
     }
 
     public int getStartX() {
@@ -60,12 +61,14 @@ public class MazeReader {
         }
         int count = 0;
         char c;
+        boolean wasStart = false;
         for(String temp : ans){
             for(int i = 0; i < temp.length(); i++){
                 c = Character.toLowerCase(temp.charAt(i));
                 if(c == 's'){
                     startX = i;
                     startY = count;
+                    wasStart = true;
                 }
                 if(c == 'e'){
                     endX = i;
@@ -74,6 +77,9 @@ public class MazeReader {
                 this.field[count][i] = !(c == '0' || c == 's' || c == 'e');
             }
             count++;
+        }
+        if(!wasStart) {
+            errorObserver.pushError("Не найдена точка старта");
         }
     }
 
