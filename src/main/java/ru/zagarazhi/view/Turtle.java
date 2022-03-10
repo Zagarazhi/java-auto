@@ -11,7 +11,6 @@ public class Turtle implements EventListener{
     private Answear answear = Answear.getInstance();
     private ConditionSetter conditionSetter = ConditionSetter.getInstance();
     private boolean noError = true;
-    private boolean first = true;
     private boolean[][] field;
     private boolean[] xValues = new boolean[5];
     private int startX = 0;
@@ -193,7 +192,6 @@ public class Turtle implements EventListener{
     }
 
     private void moveForward() {
-        first = false;
         switch (this.direction) {
             case 0:
                 this.currentY++;
@@ -228,7 +226,13 @@ public class Turtle implements EventListener{
                 //
                 break;
             case "YК":
-                //
+                if(currentX == targetX && currentY == targetY){
+                    System.out.println("Выход успешно найден!");
+                } else if (currentX == startX && currentY == startY) {
+                    System.out.println("Выход не найден");
+                } else {
+                    System.out.println("Произошло непредвиденное завешение моделирования ЛСА");
+                }
                 break;
             default:
                 errorObserver.pushError("Ошибка при выборе действия");
@@ -236,7 +240,6 @@ public class Turtle implements EventListener{
     }
 
     public void run(String lsa) {
-        first = true;
         answear.clearAnswear();
         List<Token> list = LexelAnalyzer.lex(lsa);
         if(noError){
@@ -287,14 +290,7 @@ public class Turtle implements EventListener{
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if(!first && isAtStartBlock()){
-                        System.out.println("Выход не найден");
-                    }
-                    if(isAtTargetBlock()){
-                        System.out.println("Выход успешно найден!");
-                    } else {
-                        move(message);
-                    }
+                    move(message);
                     xValues[0] = !checkToRight(this.direction);
                     xValues[1] = !checkForward(this.direction);
                     xValues[2] = !checkToLeft(this.direction);

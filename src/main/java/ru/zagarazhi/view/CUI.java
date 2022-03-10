@@ -251,13 +251,13 @@ public class CUI implements EventListener{
             }
             switch (input) {
                 case 1:
-                    turtle.run("YНD1X4U6X1U2X2U3X3U4Y1Y1X2U3D7X5U6WU1D2Y1Y2WU7D3Y2WU7D4Y3Y2WU7D6YK");
+                    turtle.run("YНD1X4U5X1U2X2U3X3U4Y1Y1X2U3D6X5U5WU1D2Y1Y2WU6D3Y2WU6D4Y3Y2WU6D5YK");
                     errorObserver.events.unsubscribe("error", turtle);
                     answear.events.unsubscribe("answear", turtle);
                     conditionSetter.events.unsubscribe("condition", turtle);
                     break;
                 case 2:
-                    turtle.run("YНD1X4U6X3U2X2U3X1U4Y3Y3X2U3D7X5U6WU1D2Y3Y2WU7D3Y2WU7D4Y1Y2WU7D6YK");
+                    turtle.run("YНD1X4U5X3U2X2U3X1U4Y3Y3X2U3D6X5U5WU1D2Y3Y2WU6D3Y2WU6D4Y1Y2WU6D5YK");
                     errorObserver.events.unsubscribe("error", turtle);
                     answear.events.unsubscribe("answear", turtle);
                     conditionSetter.events.unsubscribe("condition", turtle);
